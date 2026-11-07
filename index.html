@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#08111f"><title>DigitScope Pro | Deriv Terminal</title><link rel="stylesheet" href="/styles.css"></head>
+<body>
+<header class="topbar"><a class="brand" href="/"><span class="brandmark">D</span><span>DIGITSCOPE <b>PRO</b><small>DERIV MARKET INTELLIGENCE</small></span></a><div class="topright"><span class="feed"><i id="feedDot"></i><span id="feedStatus">Market feed offline</span></span><button id="loginBtn" class="btn primary">Connect Deriv</button><button id="logoutBtn" class="btn ghost hidden">Disconnect</button></div></header>
+<main>
+<section class="hero"><div><p class="eyebrow">LIVE SYNTHETIC-INDEX TERMINAL</p><h1>See the digits.<br><em>Know the risk.</em></h1><p class="muted">Live tick stream, rolling digit statistics and manually confirmed Deriv contracts.</p></div><div class="hero-badge"><span class="pulse"></span> LIVE MARKET DATA <small>Public feed • no account needed</small></div></section>
+<section class="stats">
+ <article class="panel metric"><label>SELECTED MARKET</label><strong id="marketName">Volatility 100 (1s)</strong><small id="symbolCode">1HZ100V</small></article>
+ <article class="panel metric"><label>LATEST QUOTE</label><strong id="quote">—</strong><small id="lastTick">Waiting for ticks</small></article>
+ <article class="panel metric"><label>LAST DIGIT</label><strong id="lastDigit" class="mint">—</strong><small>Last decimal digit</small></article>
+ <article class="panel metric"><label>SAMPLE SIZE</label><strong id="sampleSize">0</strong><small>Rolling tick window</small></article>
+</section>
+<section class="layout">
+ <article class="panel market-panel">
+  <div class="panel-head"><div><label>MARKET WATCH</label><h2>Digit distribution</h2></div><select id="marketSelect" class="select"><option value="1HZ100V">Volatility 100 (1s)</option><option value="1HZ75V">Volatility 75 (1s)</option><option value="1HZ50V">Volatility 50 (1s)</option><option value="1HZ25V">Volatility 25 (1s)</option><option value="1HZ10V">Volatility 10 (1s)</option><option value="R_100">Volatility 100</option><option value="R_75">Volatility 75</option><option value="R_50">Volatility 50</option><option value="R_25">Volatility 25</option><option value="R_10">Volatility 10</option></select></div>
+  <div class="digit-grid" id="digitGrid"></div>
+  <div class="recent-head"><span>RECENT TICKS</span><small>Newest at right</small></div><div class="recent" id="recent"></div>
+ </article>
+ <article class="panel signal-panel">
+  <div class="panel-head"><div><label>STATISTICAL READOUT</label><h2>Market balance</h2></div><span class="tag">DESCRIPTIVE</span></div>
+  <div class="signal" id="signalBox"><div class="signal-icon">…</div><div><b id="signalTitle">Collecting sample</b><small id="signalCopy">100 ticks required before a descriptive reading.</small></div></div>
+  <div class="meter-list" id="meters"></div>
+  <div class="small-note">Frequency imbalance is not a forecast. A recent hot/cold digit does not imply the next digit will repeat or reverse.</div>
+ </article>
+</section>
+<section class="layout lower">
+ <article class="panel"><div class="panel-head"><div><label>TRADE TICKET</label><h2>Manual contract entry</h2></div><span class="tag warning">CONFIRM EACH TRADE</span></div>
+  <div class="account-row"><div><label>DERIV ACCOUNT</label><select id="accountSelect" class="select" disabled><option>Connect Deriv first</option></select></div><div class="balance"><label>BALANCE</label><strong id="balance">—</strong></div></div>
+  <div class="form-grid">
+   <div><label>CONTRACT TYPE</label><select id="contractType" class="select"><option value="DIGITOVER">Digit Over</option><option value="DIGITUNDER">Digit Under</option><option value="DIGITMATCH">Matches</option><option value="DIGITDIFF">Differs</option></select></div>
+   <div><label>LAST DIGIT BARRIER</label><select id="barrier" class="select"><option>0</option><option>1</option><option>2</option><option>3</option><option>4</option><option selected>5</option><option>6</option><option>7</option><option>8</option><option>9</option></select></div>
+   <div><label>STAKE</label><input id="stake" class="input" type="number" min="0.35" max="1000" step="0.01" value="1"></div>
+   <div><label>DURATION</label><div class="inline"><input id="duration" class="input" type="number" min="1" max="10" step="1" value="1"><span class="unit">ticks</span></div></div>
+  </div>
+  <div class="trade-actions"><button id="quoteBtn" class="btn primary wide" disabled>Get contract quote</button><button id="buyBtn" class="btn buy wide" disabled>Buy contract</button></div>
+  <div id="proposalBox" class="proposal hidden"></div>
+  <div class="risk-controls"><label class="check"><input type="checkbox" id="demoConfirm" checked><span>I understand this is a high-risk options contract. I will test on demo first.</span></label><label class="check real-check"><input type="checkbox" id="realConfirm"><span>I explicitly authorize a real-money trade when a REAL account is selected.</span></label></div>
+  <div class="small-note">No automatic execution. Every purchase requires a fresh quote and a separate Buy click. Real-account mode requires an additional acknowledgement.</div>
+ </article>
+ <article class="panel"><div class="panel-head"><div><label>ACCOUNT ACTIVITY</label><h2>Open positions & history</h2></div><button id="refreshPortfolio" class="btn ghost" disabled>Refresh</button></div><div id="positions" class="empty">Connect your Deriv account to view positions.</div><div class="history-head">RECENT TRADES</div><div id="history" class="empty">No trades in this session.</div></article>
+</section>
+<section class="panel footnote"><b>Risk & data integrity</b><p>DigitScope Pro is an independent interface, not affiliated with Deriv. It displays observed tick statistics, not reliable next-tick predictions. Synthetic indices may behave unpredictably. Use demo mode first. Never risk money you cannot afford to lose. This site never stores your Deriv password or exposes your OAuth access token to browser JavaScript. Keep the server on HTTPS in production.</p></section>
+<footer>DigitScope Pro · Independent analytics · Africa/Kampala time <span id="clock"></span></footer>
+</main>
+<div id="confirmModal" class="modal hidden"><div class="modal-card"><label>TRADE CONFIRMATION</label><h2>Confirm contract purchase</h2><p id="confirmDetails"></p><p class="warn-copy">This action sends a real order to Deriv if your selected account is REAL. Trades can lose the entire stake.</p><div class="modal-actions"><button id="cancelBuy" class="btn ghost">Cancel</button><button id="confirmBuy" class="btn danger">Confirm purchase</button></div></div></div>
+<div id="toast" class="toast hidden"></div>
+<script src="/app.js" defer></script></body></html>
